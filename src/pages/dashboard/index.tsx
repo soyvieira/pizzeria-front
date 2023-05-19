@@ -1,3 +1,5 @@
+import { canSSRAuth } from '../../utils/canSSRAuth';
+
 import Head from 'next/head';
 import styles from '../../../styles/home.module.scss';
 
@@ -13,4 +15,10 @@ export default function Dashboard(){
     </>
   )
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+  return{
+    props:{}
+  }
+})
 
