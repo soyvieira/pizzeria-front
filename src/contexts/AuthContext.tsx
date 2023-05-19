@@ -5,12 +5,14 @@ import { api } from '../services/apiClient';
 import { destroyCookie, setCookie, parseCookies } from 'nookies';
 import Router from 'next/router';
 
+import { toast } from 'react-toastify';
 
 type AuthContextData = {
   user?: UserProps;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signOut: () => void;
+  signUp: (credentials: SignUpProps) => Promise<void>
 }
 
 type UserProps = {
@@ -20,6 +22,12 @@ type UserProps = {
 }
 
 type SignInProps = {
+  email: string;
+  password: string;
+}
+
+type SignUpProps = {
+  name: string;
   email: string;
   password: string;
 }
@@ -36,7 +44,7 @@ export function signOut(){
     destroyCookie(undefined, '@nextauth.token');
     Router.push('/');
   }catch{
-    console.log('erro ao deslogar');
+    console.log('Error logout');
   }
 }
 
@@ -65,16 +73,34 @@ export function AuthProvider({ children }: AuthProviderProps){
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
+      toast.success('Welcome!');
       Router.push('/dashboard');
 
-
     }catch(err){
-      console.log('Error!', err)
+      toast.error('Access failed.');
+    }
+  }
+
+  async function signUp({name, email, password}: SignUpProps) {
+    try{
+      const response = await api.post('/users', {
+        name,
+        email,
+        password
+      })
+
+      toast.success('Registration successful.');
+
+      //Redirecting to login
+      Router.push('/');
+      
+    }catch(err){
+      toast.error('User registration failed.')
     }
   }
 
   return(
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut, signUp}}>
       {children}
     </AuthContext.Provider>
   )

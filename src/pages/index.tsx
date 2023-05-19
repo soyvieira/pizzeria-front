@@ -10,6 +10,8 @@ import { Button } from '../components/ui/Button';
 
 import { AuthContext } from '../contexts/AuthContext';
 
+import { toast } from 'react-toastify';
+
 import Link from 'next/link';
 
 export default function Home() {
@@ -23,7 +25,7 @@ export default function Home() {
     event.preventDefault();
 
     if(email === '' || password === ''){
-      alert('Please, type your email and password.');
+      toast.warning('Missing required fields.');
       return;
     }
 
