@@ -1,16 +1,17 @@
 import { canSSRAuth } from '../../utils/canSSRAuth';
 
 import Head from 'next/head';
-import styles from '../../../styles/home.module.scss';
+
+import { Header } from '../../components/Header';
 
 export default function Dashboard(){
   return (
     <>
     <Head>
-      <title>Register here - Pizzeria</title>
+      <title>Dashboard - Pizzeria</title>
     </Head>
-    <div className={styles.containerCenter}>
-      <h1>Welcome to dashboard!</h1>
+    <div>
+      <Header />
     </div>
     </>
   )
